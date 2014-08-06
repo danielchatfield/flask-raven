@@ -9,3 +9,4 @@
 
 
 RAVEN_AUTH_ENDPOINT = 'https://raven.cam.ac.uk/auth/authenticate.html'
+RAVEN_RESPONSE_TIMESTAMP_DIFF = 60

@@ -18,7 +18,6 @@ from .errors import RavenError
 from .helpers import is_auth_request, remove_query_arg
 from .resource import RavenRequest, RavenResponse
 
-__version__ = '0.0.0'
 __all__ = ['raven_auth']
 
 
@@ -47,12 +46,14 @@ def raven_auth():
 
                 try:
                     raven_response = RavenResponse(raven_response)
+                    session['_raven'] = raven_response.principal
                     return redirect(remove_query_arg(), code=303)
                 except RavenError:
                     abort(400)
 
             # Check if user is already logged in
-            if '_raven' in session and session['_raven'] is not None:
+            if ('_raven' in session and session['_raven'] is not None
+                    and len(session['raven']) > 1):
                 return f(*args, **kwargs)
             else:
                 session['_raven'] = ''

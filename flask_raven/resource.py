@@ -16,7 +16,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 
 from .errors import (AuthenticationError, ResponseError,
-                     SignatureError, UserCancelledError)
+                     SignatureError, TimestampError, UserCancelledError)
 from .helpers import get_config, get_key, b64decode
 
 try:
@@ -145,6 +145,7 @@ class RavenResponse(object):
         except (TypeError, ValueError):
             raise SignatureError('Signature was malformed')
 
+        self.check_timestamp()
         self.check_signature()
 
         if self.status == 410:
@@ -161,6 +162,14 @@ class RavenResponse(object):
                 % (len(self._response_fields), len(values)))
 
         return values
+
+    def check_timestamp(self):
+        now = datetime.utcnow()
+        diff = now - self.issue
+
+        if diff.seconds > get_config('RAVEN_RESPONSE_TIMESTAMP_DIFF'):
+            raise TimestampError(
+                'Too much time has elapsed since this auth request was made')
 
     def check_signature(self):
         key = RSA.importKey(get_key())

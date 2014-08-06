@@ -21,6 +21,10 @@ class SignatureError(ResponseError):
     pass
 
 
+class TimestampError(ResponseError):
+    pass
+
+
 class AuthenticationError(RavenError):
     pass
 
