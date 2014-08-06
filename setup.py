@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='flask_raven',
-    version='0.0.0',
+    version='0.0.1',
     install_requires=["flask", "pycrypto"],
     url='http://github.com/danielchatfield/flask-raven/',
     license='Artistic 2.0',
