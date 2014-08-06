@@ -13,11 +13,11 @@ class RavenError(Exception):
     pass
 
 
-class RavenResponseError(RavenError):
+class ResponseError(RavenError):
     pass
 
 
-class SignatureError(RavenResponseError):
+class SignatureError(ResponseError):
     pass
 
 
@@ -25,5 +25,5 @@ class AuthenticationError(RavenError):
     pass
 
 
-class UserCancelledError(RavenAuthenticationError):
+class UserCancelledError(AuthenticationError):
     pass

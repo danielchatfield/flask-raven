@@ -8,4 +8,4 @@
 """
 
 
-AUTH_ENDPOINT = 'https://raven.cam.ac.uk/auth/authenticate.html'
+RAVEN_AUTH_ENDPOINT = 'https://raven.cam.ac.uk/auth/authenticate.html'
