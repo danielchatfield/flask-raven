@@ -15,9 +15,9 @@ from Crypto.Hash.SHA import SHA1Hash
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 
-from .errors import (AuthenticationError, ResponseError,
-                     SignatureError, TimestampError, UserCancelledError)
-from .helpers import get_config, get_key, b64decode
+from .errors import (AuthenticationError, ResponseError, SignatureError,
+                     TimestampError, UrlError, UserCancelledError)
+from .helpers import get_config, get_key, b64decode, remove_query_arg
 
 try:
     from urllib import urlencode
@@ -145,6 +145,7 @@ class RavenResponse(object):
         except (TypeError, ValueError):
             raise SignatureError('Signature was malformed')
 
+        self.check_request_url()
         self.check_timestamp()
         self.check_signature()
 
@@ -163,13 +164,18 @@ class RavenResponse(object):
 
         return values
 
+    def check_request_url(self):
+        if self.url != remove_query_arg():
+            raise UrlError(
+                "The requested url does not match the url returned by raven")
+
     def check_timestamp(self):
         now = datetime.utcnow()
         diff = now - self.issue
 
         if diff.seconds > get_config('RAVEN_RESPONSE_TIMESTAMP_DIFF'):
             raise TimestampError(
-                'Too much time has elapsed since this auth request was made')
+                "Too much time has elapsed since this auth request was made")
 
     def check_signature(self):
         key = RSA.importKey(get_key())

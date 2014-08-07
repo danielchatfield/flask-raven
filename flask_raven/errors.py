@@ -25,6 +25,10 @@ class TimestampError(ResponseError):
     pass
 
 
+class UrlError(ResponseError):
+    pass
+
+
 class AuthenticationError(RavenError):
     pass
 

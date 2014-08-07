@@ -53,7 +53,7 @@ def raven_auth():
 
             # Check if user is already logged in
             if ('_raven' in session and session['_raven'] is not None
-                    and len(session['raven']) > 1):
+                    and len(session['_raven']) > 1):
                 return f(*args, **kwargs)
             else:
                 session['_raven'] = ''
